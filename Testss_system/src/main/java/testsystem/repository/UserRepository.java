@@ -6,13 +6,14 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserRepository {
+public class UserRepository implements UserRepositoryInterface {
 
+    @Override
     public List<User> findAll(int page, int size) {
         List<User> users = new ArrayList<>();
         String sql = "SELECT user_id, username, email, created_at FROM Users ORDER BY user_id LIMIT ? OFFSET ?";
         try (Connection conn = DatabaseConfig.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) { //подготовленный запрос (защита от SQL-инъекций)
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, size);
             stmt.setInt(2, (page - 1) * size);
             ResultSet rs = stmt.executeQuery();
@@ -30,6 +31,7 @@ public class UserRepository {
         return users;
     }
 
+    @Override
     public int count() {
         String sql = "SELECT COUNT(*) FROM Users";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -42,6 +44,7 @@ public class UserRepository {
         return 0;
     }
 
+    @Override
     public void insert(User user) {
         String sql = "INSERT INTO Users (username, email, created_at) VALUES (?, ?, NOW())";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -54,6 +57,7 @@ public class UserRepository {
         }
     }
 
+    @Override
     public void update(User user) {
         String sql = "UPDATE Users SET username = ?, email = ? WHERE user_id = ?";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -67,6 +71,7 @@ public class UserRepository {
         }
     }
 
+    @Override
     public void delete(long id) {
         String sql = "DELETE FROM Users WHERE user_id = ?";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -78,6 +83,7 @@ public class UserRepository {
         }
     }
 
+    @Override
     public List<User> search(String keyword, int page, int size) {
         List<User> users = new ArrayList<>();
         String sql = "SELECT user_id, username, email, created_at FROM Users " +

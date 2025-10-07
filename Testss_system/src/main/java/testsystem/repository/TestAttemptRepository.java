@@ -6,8 +6,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestAttemptRepository {
+public class TestAttemptRepository implements TestAttemptRepositoryInterface {
 
+    @Override
     public List<TestAttempt> findAll(int page, int size) {
         List<TestAttempt> attempts = new ArrayList<>();
         String sql = "SELECT attempt_id, user_id, test_id, score, started_at, finished_at FROM Test_Attempts ORDER BY attempt_id LIMIT ? OFFSET ?";
@@ -32,6 +33,7 @@ public class TestAttemptRepository {
         return attempts;
     }
 
+    @Override
     public int count() {
         String sql = "SELECT COUNT(*) FROM Test_Attempts";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -44,6 +46,7 @@ public class TestAttemptRepository {
         return 0;
     }
 
+    @Override
     public void insert(TestAttempt attempt) {
         String sql = "INSERT INTO Test_Attempts (user_id, test_id, score, started_at, finished_at) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -59,6 +62,7 @@ public class TestAttemptRepository {
         }
     }
 
+    @Override
     public void update(TestAttempt attempt) {
         String sql = "UPDATE Test_Attempts SET user_id = ?, test_id = ?, score = ?, started_at = ?, finished_at = ? WHERE attempt_id = ?";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -75,6 +79,7 @@ public class TestAttemptRepository {
         }
     }
 
+    @Override
     public void delete(long id) {
         String sql = "DELETE FROM Test_Attempts WHERE attempt_id = ?";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -86,6 +91,7 @@ public class TestAttemptRepository {
         }
     }
 
+    @Override
     public List<TestAttempt> findByUserId(long userId, int page, int size) {
         List<TestAttempt> attempts = new ArrayList<>();
         String sql = "SELECT attempt_id, user_id, test_id, score, started_at, finished_at FROM Test_Attempts WHERE user_id = ? ORDER BY started_at DESC LIMIT ? OFFSET ?";

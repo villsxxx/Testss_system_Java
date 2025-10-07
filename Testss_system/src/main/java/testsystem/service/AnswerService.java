@@ -2,10 +2,19 @@ package testsystem.service;
 
 import testsystem.model.Answer;
 import testsystem.repository.AnswerRepository;
+import testsystem.repository.AnswerRepositoryInterface;
 import java.util.List;
 
 public class AnswerService {
-    private final AnswerRepository answerRepository = new AnswerRepository();
+    private final AnswerRepositoryInterface answerRepository;
+
+    public AnswerService() {
+        this.answerRepository = new AnswerRepository();
+    }
+
+    public AnswerService(AnswerRepositoryInterface answerRepository) {
+        this.answerRepository = answerRepository;
+    }
 
     public List<Answer> getAllAnswers(int page, int size) {
         return answerRepository.findAll(page, size);
@@ -16,15 +25,12 @@ public class AnswerService {
     }
 
     public void createAnswer(Answer answer) {
-        // Валидация questionId
         if (answer.getQuestionId() == null || answer.getQuestionId() <= 0) {
             throw new IllegalArgumentException("ID вопроса не может быть пустым или отрицательным");
         }
-        // Валидация текста ответа
         if (answer.getText() == null || answer.getText().trim().isEmpty()) {
             throw new IllegalArgumentException("Текст ответа не может быть пустым");
         }
-        // Валидация баллов
         if (answer.getPoints() < 0) {
             throw new IllegalArgumentException("Баллы не могут быть отрицательными");
         }
@@ -32,19 +38,15 @@ public class AnswerService {
     }
 
     public void updateAnswer(Answer answer) {
-        // Валидация ID
         if (answer.getId() == null || answer.getId() <= 0) {
             throw new IllegalArgumentException("ID ответа не может быть пустым или отрицательным");
         }
-        // Валидация questionId
         if (answer.getQuestionId() == null || answer.getQuestionId() <= 0) {
             throw new IllegalArgumentException("ID вопроса не может быть пустым или отрицательным");
         }
-        // Валидация текста
         if (answer.getText() == null || answer.getText().trim().isEmpty()) {
             throw new IllegalArgumentException("Текст ответа не может быть пустым");
         }
-        // Валидация баллов
         if (answer.getPoints() < 0) {
             throw new IllegalArgumentException("Баллы не могут быть отрицательными");
         }

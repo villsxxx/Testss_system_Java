@@ -2,10 +2,19 @@ package testsystem.service;
 
 import testsystem.model.TestAttempt;
 import testsystem.repository.TestAttemptRepository;
+import testsystem.repository.TestAttemptRepositoryInterface;
 import java.util.List;
 
 public class TestAttemptService {
-    private final TestAttemptRepository testAttemptRepository = new TestAttemptRepository();
+    private final TestAttemptRepositoryInterface testAttemptRepository;
+
+    public TestAttemptService() {
+        this.testAttemptRepository = new TestAttemptRepository();
+    }
+
+    public TestAttemptService(TestAttemptRepositoryInterface testAttemptRepository) {
+        this.testAttemptRepository = testAttemptRepository;
+    }
 
     public List<TestAttempt> getAllAttempts(int page, int size) {
         return testAttemptRepository.findAll(page, size);
@@ -16,23 +25,18 @@ public class TestAttemptService {
     }
 
     public void createAttempt(TestAttempt attempt) {
-        // Валидация userId
         if (attempt.getUserId() == null || attempt.getUserId() <= 0) {
             throw new IllegalArgumentException("ID пользователя не может быть пустым или отрицательным");
         }
-        // Валидация testId
         if (attempt.getTestId() == null || attempt.getTestId() <= 0) {
             throw new IllegalArgumentException("ID теста не может быть пустым или отрицательным");
         }
-        // Валидация баллов
         if (attempt.getScore() < 0) {
             throw new IllegalArgumentException("Баллы не могут быть отрицательными");
         }
-        // Валидация даты начала
         if (attempt.getStartedAt() == null) {
             throw new IllegalArgumentException("Дата начала не может быть пустой");
         }
-        // Валидация даты окончания
         if (attempt.getFinishedAt() == null) {
             throw new IllegalArgumentException("Дата окончания не может быть пустой");
         }
@@ -40,27 +44,21 @@ public class TestAttemptService {
     }
 
     public void updateAttempt(TestAttempt attempt) {
-        // Валидация ID
         if (attempt.getId() == null || attempt.getId() <= 0) {
             throw new IllegalArgumentException("ID попытки не может быть пустым или отрицательным");
         }
-        // Валидация userId
         if (attempt.getUserId() == null || attempt.getUserId() <= 0) {
             throw new IllegalArgumentException("ID пользователя не может быть пустым или отрицательным");
         }
-        // Валидация testId
         if (attempt.getTestId() == null || attempt.getTestId() <= 0) {
             throw new IllegalArgumentException("ID теста не может быть пустым или отрицательным");
         }
-        // Валидация баллов
         if (attempt.getScore() < 0) {
             throw new IllegalArgumentException("Баллы не могут быть отрицательными");
         }
-        // Валидация даты начала
         if (attempt.getStartedAt() == null) {
             throw new IllegalArgumentException("Дата начала не может быть пустой");
         }
-        // Валидация даты окончания
         if (attempt.getFinishedAt() == null) {
             throw new IllegalArgumentException("Дата окончания не может быть пустой");
         }

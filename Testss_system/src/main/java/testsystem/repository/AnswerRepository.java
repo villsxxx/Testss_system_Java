@@ -6,8 +6,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnswerRepository {
+public class AnswerRepository implements AnswerRepositoryInterface {
 
+    @Override
     public List<Answer> findAll(int page, int size) {
         List<Answer> answers = new ArrayList<>();
         String sql = "SELECT answer_id, question_id, answer_text, is_correct, points FROM Answers ORDER BY answer_id LIMIT ? OFFSET ?";
@@ -31,6 +32,7 @@ public class AnswerRepository {
         return answers;
     }
 
+    @Override
     public int count() {
         String sql = "SELECT COUNT(*) FROM Answers";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -43,6 +45,7 @@ public class AnswerRepository {
         return 0;
     }
 
+    @Override
     public void insert(Answer answer) {
         String sql = "INSERT INTO Answers (question_id, answer_text, is_correct, points) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -57,6 +60,7 @@ public class AnswerRepository {
         }
     }
 
+    @Override
     public void update(Answer answer) {
         String sql = "UPDATE Answers SET question_id = ?, answer_text = ?, is_correct = ?, points = ? WHERE answer_id = ?";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -72,6 +76,7 @@ public class AnswerRepository {
         }
     }
 
+    @Override
     public void delete(long id) {
         String sql = "DELETE FROM Answers WHERE answer_id = ?";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -83,6 +88,7 @@ public class AnswerRepository {
         }
     }
 
+    @Override
     public List<Answer> findByQuestionId(long questionId) {
         List<Answer> answers = new ArrayList<>();
         String sql = "SELECT answer_id, question_id, answer_text, is_correct, points FROM Answers WHERE question_id = ?";

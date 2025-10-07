@@ -2,10 +2,19 @@ package testsystem.service;
 
 import testsystem.model.Question;
 import testsystem.repository.QuestionRepository;
+import testsystem.repository.QuestionRepositoryInterface;
 import java.util.List;
 
 public class QuestionService {
-    private final QuestionRepository questionRepository = new QuestionRepository();
+    private final QuestionRepositoryInterface questionRepository;
+
+    public QuestionService() {
+        this.questionRepository = new QuestionRepository();
+    }
+
+    public QuestionService(QuestionRepositoryInterface questionRepository) {
+        this.questionRepository = questionRepository;
+    }
 
     public List<Question> getAllQuestions(int page, int size) {
         return questionRepository.findAll(page, size);
@@ -16,15 +25,12 @@ public class QuestionService {
     }
 
     public void createQuestion(Question question) {
-        // Валидация testId
         if (question.getTestId() == null || question.getTestId() <= 0) {
             throw new IllegalArgumentException("ID теста не может быть пустым или отрицательным");
         }
-        // Валидация текста вопроса
         if (question.getText() == null || question.getText().trim().isEmpty()) {
             throw new IllegalArgumentException("Текст вопроса не может быть пустым");
         }
-        // Валидация типа
         String[] validTypes = {"single_choice", "multiple_choice", "text", "true_false"};
         boolean isValidType = false;
         for (String type : validTypes) {
@@ -40,19 +46,15 @@ public class QuestionService {
     }
 
     public void updateQuestion(Question question) {
-        // Валидация ID
         if (question.getId() == null || question.getId() <= 0) {
             throw new IllegalArgumentException("ID вопроса не может быть пустым или отрицательным");
         }
-        // Валидация testId
         if (question.getTestId() == null || question.getTestId() <= 0) {
             throw new IllegalArgumentException("ID теста не может быть пустым или отрицательным");
         }
-        // Валидация текста
         if (question.getText() == null || question.getText().trim().isEmpty()) {
             throw new IllegalArgumentException("Текст вопроса не может быть пустым");
         }
-        // Валидация типа
         String[] validTypes = {"single_choice", "multiple_choice", "text", "true_false"};
         boolean isValidType = false;
         for (String type : validTypes) {

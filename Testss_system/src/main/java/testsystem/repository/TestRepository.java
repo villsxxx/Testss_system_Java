@@ -6,8 +6,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestRepository {
+public class TestRepository implements TestRepositoryInterface {
 
+    @Override
     public List<Test> findAll(int page, int size) {
         List<Test> tests = new ArrayList<>();
         String sql = "SELECT test_id, title, description, is_active, created_at FROM Tests ORDER BY test_id LIMIT ? OFFSET ?";
@@ -31,6 +32,7 @@ public class TestRepository {
         return tests;
     }
 
+    @Override
     public int count() {
         String sql = "SELECT COUNT(*) FROM Tests";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -43,6 +45,7 @@ public class TestRepository {
         return 0;
     }
 
+    @Override
     public void insert(Test test) {
         String sql = "INSERT INTO Tests (title, description, is_active, created_at) VALUES (?, ?, ?, NOW())";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -56,6 +59,7 @@ public class TestRepository {
         }
     }
 
+    @Override
     public void update(Test test) {
         String sql = "UPDATE Tests SET title = ?, description = ?, is_active = ? WHERE test_id = ?";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -70,6 +74,7 @@ public class TestRepository {
         }
     }
 
+    @Override
     public void delete(long id) {
         String sql = "DELETE FROM Tests WHERE test_id = ?";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -81,6 +86,7 @@ public class TestRepository {
         }
     }
 
+    @Override
     public List<Test> search(String keyword, int page, int size) {
         List<Test> tests = new ArrayList<>();
         String sql = "SELECT test_id, title, description, is_active, created_at FROM Tests " +

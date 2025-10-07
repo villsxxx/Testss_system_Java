@@ -6,8 +6,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserAnswerRepository {
+public class UserAnswerRepository implements UserAnswerRepositoryInterface {
 
+    @Override
     public List<UserAnswer> findAll(int page, int size) {
         List<UserAnswer> userAnswers = new ArrayList<>();
         String sql = "SELECT user_answer_id, attempt_id, question_id, answer_id, text_answer FROM User_Answers ORDER BY user_answer_id LIMIT ? OFFSET ?";
@@ -21,7 +22,6 @@ public class UserAnswerRepository {
                 ua.setId(rs.getLong("user_answer_id"));
                 ua.setAttemptId(rs.getLong("attempt_id"));
                 ua.setQuestionId(rs.getLong("question_id"));
-                // answer_id может быть NULL
                 ua.setAnswerId(rs.getObject("answer_id") == null ? null : rs.getLong("answer_id"));
                 ua.setTextAnswer(rs.getString("text_answer"));
                 userAnswers.add(ua);
@@ -32,6 +32,7 @@ public class UserAnswerRepository {
         return userAnswers;
     }
 
+    @Override
     public int count() {
         String sql = "SELECT COUNT(*) FROM User_Answers";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -44,6 +45,7 @@ public class UserAnswerRepository {
         return 0;
     }
 
+    @Override
     public void insert(UserAnswer userAnswer) {
         String sql = "INSERT INTO User_Answers (attempt_id, question_id, answer_id, text_answer) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -62,6 +64,7 @@ public class UserAnswerRepository {
         }
     }
 
+    @Override
     public void update(UserAnswer userAnswer) {
         String sql = "UPDATE User_Answers SET attempt_id = ?, question_id = ?, answer_id = ?, text_answer = ? WHERE user_answer_id = ?";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -81,6 +84,7 @@ public class UserAnswerRepository {
         }
     }
 
+    @Override
     public void delete(long id) {
         String sql = "DELETE FROM User_Answers WHERE user_answer_id = ?";
         try (Connection conn = DatabaseConfig.getConnection();
@@ -92,6 +96,7 @@ public class UserAnswerRepository {
         }
     }
 
+    @Override
     public List<UserAnswer> findByAttemptId(long attemptId) {
         List<UserAnswer> userAnswers = new ArrayList<>();
         String sql = "SELECT user_answer_id, attempt_id, question_id, answer_id, text_answer FROM User_Answers WHERE attempt_id = ?";
