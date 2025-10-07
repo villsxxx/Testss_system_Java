@@ -12,7 +12,7 @@ public class UserRepository {
         List<User> users = new ArrayList<>();
         String sql = "SELECT user_id, username, email, created_at FROM Users ORDER BY user_id LIMIT ? OFFSET ?";
         try (Connection conn = DatabaseConfig.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) { //подготовленный запрос (защита от SQL-инъекций)
             stmt.setInt(1, size);
             stmt.setInt(2, (page - 1) * size);
             ResultSet rs = stmt.executeQuery();
